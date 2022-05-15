@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Top</title>
+<meta name="description" content="Hello">
+<script th:src="@{/js/topPage.js}"></script>
+</head>
+<body>
+	<div class="content">
+		<div class="import_content">
+			<p id="test">三井住友カード明細CSV</p>
+			<input type="file" id="smbc_import_file" name="import_file">
+			<p>Amazon明細CSV</p>
+			<input type="file" id="amazon_import_file" name="import_file">
+		</div>
+		<input type="submit" name="import_file" value="START">
+		<button th:onclick="changeTextColor([[${elemId}]]);">色を変える</button>
+		
+	</div>
+</body>
+</html>
+
