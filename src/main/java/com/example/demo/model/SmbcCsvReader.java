@@ -16,10 +16,10 @@ public class SmbcCsvReader {
 		
 	}
 	
-	public static List<String[]> read(final MultipartFile fileName){
+	public static List<String[]> read(final MultipartFile file){
 		final List<String[]> readData = new ArrayList<String[]>();
 		try(BufferedReader br = new BufferedReader(
-				new InputStreamReader(fileName.getInputStream(), Charset.forName("SJIS")))){
+				new InputStreamReader(file.getInputStream(), Charset.forName("SJIS")))){
 			String line;
 			while((line = br.readLine()) != null) {
 				final String[] data = line.split(",");
