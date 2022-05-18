@@ -4,13 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-public class AmazonCsvReader {
+public class AmazonCsvReader extends CsvReader{
+	//判定用の日付列
+	private static final int dateIndex = 0;
 	private AmazonCsvReader() {
 		
 	}
@@ -23,7 +24,7 @@ public class AmazonCsvReader {
 			while((line = br.readLine()) != null) {
 				// ２重ダブルクオーテーションになっていることがある
 				String[] data = line.replaceAll("\"", "").split(",", -1);
-				if(!isOrderData(data)) {continue;}
+				if(!isReadTargetData(data[dateIndex])) {continue;}
 				readData.add(data);
 			}
 		}catch(IOException ex) {
@@ -31,19 +32,5 @@ public class AmazonCsvReader {
 			ex.printStackTrace();
 		}
 		return readData;
-	}
-
-	private static boolean isOrderData(final String[] data) {
-		try{
-		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-		    // 厳密にチェック
-		    sdf.setLenient(false);
-		    // ２重ダブルクオーテーションになっていることがある
-		    sdf.parse(data[0].replace("\"", ""));
-		    return true;
-		 
-		  }catch(Exception ex){
-		    return false;
-		  }
 	}
 }
