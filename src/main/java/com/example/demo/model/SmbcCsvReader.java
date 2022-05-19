@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class SmbcCsvReader{
 	//判定用の日付列位置
 	private final int dateIndex = 0;
-	private final CsvReader csvReader = new CsvReader();
+	private final CsvReaderUtil csvReader = new CsvReaderUtil();
 	
 	//ユーティリティクラスなのでprivate(Csvを文字列Listで返すだけ）
 	public SmbcCsvReader() {

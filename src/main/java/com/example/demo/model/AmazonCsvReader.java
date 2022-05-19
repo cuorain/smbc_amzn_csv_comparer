@@ -12,7 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class AmazonCsvReader{
 	//判定用の日付列
 	private static final int dateIndex = 0;
-	private final CsvReader csvReader = new CsvReader();
+	private final CsvReaderUtil csvReader = new CsvReaderUtil();
 	
 	public AmazonCsvReader() {
 		
