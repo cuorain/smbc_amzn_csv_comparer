@@ -25,7 +25,8 @@ public class TopPageController {
 	
 	@PostMapping(value = "/", params = "import_file")
 	public String runCheckCSVDifference(@RequestParam("smbc_import_file") MultipartFile smbcCSV, @RequestParam("smbc_import_file") MultipartFile amazonCSV) {
-		final List<String[]> smbcRawData = SmbcCsvReader.read(smbcCSV);
+		final SmbcCsvReader reader = new SmbcCsvReader();
+		final List<String[]> smbcRawData = reader.read(smbcCSV);
 		final BillingStatementList smbcData = new BillingStatementList(smbcRawData);
 		return "topPage";
 	}

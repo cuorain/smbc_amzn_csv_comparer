@@ -18,7 +18,8 @@ public class AmazonCsvReaderTests {
 			String fileName = AmazonCsvReaderTests.class.getClassLoader().getResource("Amazon_Test.csv").getPath();
 			FileInputStream inputFile = new FileInputStream(fileName);
 			MockMultipartFile file = new MockMultipartFile("testFile", inputFile);
-			List<String[]> readData = AmazonCsvReader.read(file);
+			final AmazonCsvReader reader = new AmazonCsvReader();
+			List<String[]> readData = reader.read(file);
 			assertThat(readData.get(0)).isEqualTo(new String[] {"2022/4/30","249-0812423-5520631","（注文全体）","","","","","1491","","","中根 涼平","1491","","","MasterCard（下4けたが3302）","https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0812423-5520631","https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o02?ie=UTF8&orderID=249-0812423-5520631",""});
 			assertThat(readData.get(1)).isEqualTo(new String[] {"2022/4/30","249-0812423-5520631","マウントハーゲン オーガニック フェアトレード カフェインレスインスタントコーヒー100g インスタント","販売： アマゾンジャパン合同会社  コンディション： 新品","1491","1","1491","","中根 涼平","2022年4月30日に発送済み","中根 涼平","","","","MasterCard（下4けたが3302）","https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0812423-5520631","https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o02?ie=UTF8&orderID=249-0812423-5520631","https://www.amazon.co.jp/gp/product/B01C5JMW90/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"});
 			assertThat(readData.get(2)).isEqualTo(new String[] {"2022/4/30","249-0812423-5520631","（クレジットカードへの請求）","","","","","","","","中根 涼平","","2022/4/30","1491","MasterCard（下4けたが3302）","https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0812423-5520631","https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o02?ie=UTF8&orderID=249-0812423-5520631",""});
