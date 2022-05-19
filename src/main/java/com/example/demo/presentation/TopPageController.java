@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.model.AmazonCsvReader;
 import com.example.demo.model.BillingStatementList;
 import com.example.demo.model.SmbcCsvReader;
 
@@ -25,9 +26,16 @@ public class TopPageController {
 	
 	@PostMapping(value = "/", params = "import_file")
 	public String runCheckCSVDifference(@RequestParam("smbc_import_file") MultipartFile smbcCSV, @RequestParam("smbc_import_file") MultipartFile amazonCSV) {
-		final SmbcCsvReader reader = new SmbcCsvReader();
-		final List<String[]> smbcRawData = reader.read(smbcCSV);
+		//SMBCカード請求データを取得
+		final SmbcCsvReader smbcCsvReader = new SmbcCsvReader();
+		final List<String[]> smbcRawData = smbcCsvReader.read(smbcCSV);
 		final BillingStatementList smbcData = new BillingStatementList(smbcRawData);
+		
+		//Amazon注文データを取得
+		final AmazonCsvReader amazonCsvReader = new AmazonCsvReader();
+		final List<String[]> amazonRawData = amazonCsvReader.read(smbcCSV);
+		final BillingStatementList amazonData = new BillingStatementList(amazonRawData);
+		
 		return "topPage";
 	}
 }
