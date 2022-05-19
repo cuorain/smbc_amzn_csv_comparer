@@ -16,7 +16,7 @@ public class OrderStatementTests {
 	@Test
 	void testImportAmazon() {
 		try {
-			String[] inputAmazonLine = {"2022/5/12", "249-4581037-7642224", "テスト駆動開発入門書", "", "", "", "", "1712", "", "", "中根 涼平", "", "2022/5/13", "1782", "MasterCard（下4けたが3302）", "", "", ""};
+			String[] inputAmazonLine = {"2022/5/13", "テスト駆動開発入門書", "1782"};
 			OrderStatement inputOrder = new OrderStatement(inputAmazonLine);
 			
 			Field date = OrderStatement.class.getDeclaredField("billedDate");

@@ -10,10 +10,10 @@ public class OrderStatement {
 	private final String itemName;
 	
 	public OrderStatement(final String[] line){
-		String[] inputDate = line[12].split("/");
+		String[] inputDate = line[0].split("/");
 		int[] inputDateToInt = Stream.of(inputDate).mapToInt(Integer::parseInt).toArray();
 		this.billedDate = LocalDate.of(inputDateToInt[0], inputDateToInt[1], inputDateToInt[2]);
-		this.amount = new BigDecimal(line[13]);
-		this.itemName = line[2];
+		this.amount = new BigDecimal(line[2]);
+		this.itemName = line[1];
 	}
 }
