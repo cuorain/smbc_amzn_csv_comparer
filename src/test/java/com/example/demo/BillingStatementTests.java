@@ -26,6 +26,10 @@ public class BillingStatementTests {
 			amount.setAccessible(true);
 			assertThat((BigDecimal)amount.get(inputBilling)).isEqualTo(new BigDecimal(1234));
 			assertThat((BigDecimal)amount.get(inputBilling)).isNotEqualTo(new BigDecimal(1233));
+			Field biller = BillingStatement.class.getDeclaredField("biller");
+			biller.setAccessible(true);
+			assertThat((String)biller.get(inputBilling)).isEqualTo("dummy");
+			assertThat((String)biller.get(inputBilling)).isNotEqualTo("dummy2");
 		}catch(NoSuchFieldException ex) {
 			fail();
 		} catch (IllegalAccessException e) {

@@ -40,18 +40,18 @@ public class TopPageController {
 		final OrderStatementList amazonData = new OrderStatementList(amazonRawData);
 		final List<Map<String, String>> list = new ArrayList<>();
 		Map<String, String> map = new HashMap<String,String>();
-		map.put("date", "smbctest");
-		map.put("item", "itemName");
+		map.put("billingDate", "smbctest");
+		map.put("biller", "itemName");
 		map.put("amount", "1111");
 		list.add(map);
 		Map<String, String> map2 = new HashMap<String,String>();
-		map2.put("date", "smbctest2");
-		map2.put("item", "itemName2");
+		map2.put("billingDate", "smbctest2");
+		map2.put("biller", "itemName2");
 		map2.put("amount", "1112");
 		list.add(map2);
-		model.addAttribute("smbcNotMatch", list);
-		model.addAttribute("amazonNotMatch", new ArrayList<>());
-		model.addAttribute("match", new ArrayList<>());
+		model.addAttribute("smbcNotMatched", list);
+		model.addAttribute("amazonNotMatched", new ArrayList<>());
+		model.addAttribute("matched", new ArrayList<>());
 		return "topPage";
 	}
 }

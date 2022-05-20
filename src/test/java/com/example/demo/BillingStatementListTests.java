@@ -19,9 +19,9 @@ public class BillingStatementListTests {
 	void testBuildBillingList() {
 		try {
 			List<String[]> inputSMBCLine = (List<String[]>) new ArrayList<String[]>(){{
-					add(new String[] {"2022/5/13", "dummy", "1234"});
-					add(new String[] {"2022/5/14", "dummy", "5678"});
-					add(new String[] {"2022/5/15", "dummy", "90"});
+					add(new String[] {"2022/5/13", "dummy1", "1234"});
+					add(new String[] {"2022/5/14", "dummy2", "5678"});
+					add(new String[] {"2022/5/15", "dummy3", "90"});
 			}};
 			BillingStatementList billingList = new BillingStatementList(inputSMBCLine);
 			//リフレクション
@@ -32,6 +32,8 @@ public class BillingStatementListTests {
 			date.setAccessible(true);
 			Field amount = BillingStatement.class.getDeclaredField("amount");
 			amount.setAccessible(true);
+			Field biller = BillingStatement.class.getDeclaredField("biller");
+			biller.setAccessible(true);
 			
 			assertThat((LocalDate)date.get(billingStatement.get(0))).isEqualTo(LocalDate.of(2022, 5, 13));
 			assertThat((LocalDate)date.get(billingStatement.get(1))).isEqualTo(LocalDate.of(2022, 5, 14));
@@ -40,6 +42,10 @@ public class BillingStatementListTests {
 			assertThat((BigDecimal)amount.get(billingStatement.get(0))).isEqualTo(new BigDecimal(1234));
 			assertThat((BigDecimal)amount.get(billingStatement.get(1))).isEqualTo(new BigDecimal(5678));
 			assertThat((BigDecimal)amount.get(billingStatement.get(2))).isEqualTo(new BigDecimal(90));
+			
+			assertThat((String)biller.get(billingStatement.get(0))).isEqualTo("dummy1");
+			assertThat((String)biller.get(billingStatement.get(1))).isEqualTo("dummy2");
+			assertThat((String)biller.get(billingStatement.get(2))).isEqualTo("dummy3");
 		}catch(NoSuchFieldException e) {
 			e.printStackTrace();
 			fail(e.getMessage());

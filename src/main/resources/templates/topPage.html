@@ -26,8 +26,8 @@
 	        <td>金額</td>
 	    </tr>
 	    <tr th:each="line:${smbcNotMatch}">
-	        <td th:text=${line.date}></td>
-	        <td th:text=${line.item}></td>
+	        <td th:text=${line.billingDate}></td>
+	        <td th:text=${line.biller}></td>
 	        <td th:text=${line.amount}></td>
 	    </tr>
 	    </table>
@@ -39,7 +39,7 @@
 	        <td>金額</td>
 	    </tr>
 	    <tr th:each="line:${amazonNotMatch}">
-	        <td th:text=${line.date}></td>
+	        <td th:text=${line.orderDate}></td>
 	        <td th:text=${line.item}></td>
 	        <td th:text=${line.amount}></td>
 	    </tr>
@@ -52,7 +52,7 @@
 	        <td>金額</td>
 	    </tr>
 	    <tr th:each="line:${match}">
-	        <td th:text=${line.date}></td>
+	        <td th:text=${line.orderDate}></td>
 	        <td th:text=${line.item}></td>
 	        <td th:text=${line.amount}></td>
 	    </tr>
