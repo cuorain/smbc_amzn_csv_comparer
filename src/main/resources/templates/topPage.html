@@ -4,20 +4,60 @@
 <meta charset="UTF-8">
 <title>Top</title>
 <meta name="description" content="Hello">
+<link th:href="@{/CSS/topPage.css}" rel="stylesheet">
 <script th:src="@{/js/topPage.js}"></script>
 </head>
 <body>
 	<div class="content">
-		<div class="import_content">
+		<form id="data_upload_form" enctype="multipart/form-data" method="post" action= "/">
 			<p id="test">三井住友カード明細CSV</p>
-			<input type="file" id="smbc_import_file" name="import_file">
+			<input type="file" id="smbc_import_file" name="smbc_import_file">
 			<p>Amazon明細CSV</p>
-			<input type="file" id="amazon_import_file" name="import_file">
-		</div>
-		<input type="submit" name="import_file" value="START">
-		<button th:onclick="changeTextColor([[${elemId}]]);">色を変える</button>
-		
+			<input type="file" id="amazon_import_file" name="amazon_import_file">
+			<input type="submit" name="import_file" value="START">
+		</form>
 	</div>
+	<div class="result">
+		<table border="1">
+		<caption>三井住友カード不一致</caption>
+		<tr>
+	        <td>日付</td>
+	        <td>請求元</td>
+	        <td>金額</td>
+	    </tr>
+	    <tr th:each="line:${smbcNotMatch}">
+	        <td th:text=${line.date}></td>
+	        <td th:text=${line.item}></td>
+	        <td th:text=${line.amount}></td>
+	    </tr>
+	    </table>
+	    <table border="1">
+		<caption>Amazon不一致</caption>
+		<tr>
+	        <td>日付</td>
+	        <td>商品</td>
+	        <td>金額</td>
+	    </tr>
+	    <tr th:each="line:${amazonNotMatch}">
+	        <td th:text=${line.date}></td>
+	        <td th:text=${line.item}></td>
+	        <td th:text=${line.amount}></td>
+	    </tr>
+	    </table>
+	    <table border="1">
+		<caption>Amazon一致</caption>
+		<tr>
+	        <td>日付</td>
+	        <td>商品</td>
+	        <td>金額</td>
+	    </tr>
+	    <tr th:each="line:${match}">
+	        <td th:text=${line.date}></td>
+	        <td th:text=${line.item}></td>
+	        <td th:text=${line.amount}></td>
+	    </tr>
+	    </table>
+    </div>
 </body>
 </html>
 
