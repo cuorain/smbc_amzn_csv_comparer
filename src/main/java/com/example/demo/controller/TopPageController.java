@@ -29,13 +29,11 @@ public class TopPageController {
 	@PostMapping(value = "/", params = "import_file")
 	public String runCheckCSVDifference(@RequestParam("smbc_import_file") MultipartFile smbcCSV, @RequestParam("amazon_import_file") MultipartFile amazonCSV, Model model) {
 		//SMBCカード請求データを取得
-		final SmbcCsvReader smbcCsvReader = new SmbcCsvReader();
-		final List<String[]> smbcRawData = smbcCsvReader.read(smbcCSV);
+		final List<String[]> smbcRawData = SmbcCsvReader.read(smbcCSV);
 		final BillingStatementList smbcData = new BillingStatementList(smbcRawData);
 		
 		//Amazon注文データを取得
-		final AmazonCsvReader amazonCsvReader = new AmazonCsvReader();
-		final List<String[]> amazonRawData = amazonCsvReader.read(amazonCSV);
+		final List<String[]> amazonRawData = AmazonCsvReader.read(amazonCSV);
 		final List<String[]> amazonCompiledData = CompileOrderData.getConpiledOrder(amazonRawData);
 		final OrderStatementList amazonData = new OrderStatementList(amazonCompiledData);
 
