@@ -3,7 +3,6 @@ package com.example.demo;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -19,72 +18,54 @@ public class CompileOrderDataTests {
 	
 	@Test
 	void testBuildAmazonOneOrder() {
-		try {
-			String[][] inputOrderLines = {
-						{"2022/2/18", "249-4581037-7642224", "（注文全体）", "", "", "", "", "1782", "", "", "中根 涼平", "1782", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""},
-						{"2022/2/18", "249-4581037-7642224", "Webカメラ", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1782", "1", "1782", "", "中根涼平", "2022年2月18日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/product/B07QMKND9M/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"},
-						{"2022/2/18", "249-4581037-7642224", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/2/19", "999", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""}
-					};
-			CompileOrderData inputOrder = new CompileOrderData(inputOrderLines);
-			Field orderLine = CompileOrderData.class.getDeclaredField("orderData");
-			orderLine.setAccessible(true);
-			List<String[]> order = (List<String[]>)orderLine.get(inputOrder);
-			String[] expect = {"2022/2/19", "Webカメラ", "999"};
-			//assertThat(order.equals(expect)).isEqualTo(true);
-			assertThat(Arrays.toString(order.get(0))).isEqualTo(Arrays.toString(expect));
-			
-			String[] unexpect = {"2022/2/19", "Webカメラunexpect", "999"};
-			assertThat(order.get(0).equals(unexpect[0])).isEqualTo(false);
-		}catch(NoSuchFieldException ex) {
-			fail();
-		} catch (IllegalAccessException e) {
-			fail();
-		}
+		List<String[]> inputOrderLines = (List<String[]>) new ArrayList<String[]>(){{
+					add(new String[] {"2022/2/18", "249-4581037-7642224", "（注文全体）", "", "", "", "", "1782", "", "", "中根 涼平", "1782", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""});
+					add(new String[] {"2022/2/18", "249-4581037-7642224", "Webカメラ", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1782", "1", "1782", "", "中根涼平", "2022年2月18日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/product/B07QMKND9M/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"});
+					add(new String[] {"2022/2/18", "249-4581037-7642224", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/2/19", "999", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""});
+		}};
+		List<String[]> order = CompileOrderData.getConpiledOrder(inputOrderLines);
+		String[] expect = {"2022/2/19", "Webカメラ", "999"};
+		//assertThat(order.equals(expect)).isEqualTo(true);
+		assertThat(Arrays.toString(order.get(0))).isEqualTo(Arrays.toString(expect));
+		
+		String[] unexpect = {"2022/2/19", "Webカメラunexpect", "999"};
+		assertThat(order.get(0).equals(unexpect[0])).isEqualTo(false);
 	}
 	
 	@Test
 	void testBuildAmazonIncludeMultipleOrder() {
-		try {
-			String[][] inputMultipleOrder = {
-					{"2022/3/1", "249-0204032-0068674", "（注文全体）", "", "", "", "", "9380", "", "", "中根 涼平", "7321", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""},
-					{"2022/3/1", "249-0204032-0068674", "昇降チェア", "販売： アマゾンジャパン合同会社  コンディション： 新品", "7499", "1", "7499", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B08CV44VBW/ref=ppx_od_dt_b_asin_title_s01?ie=UTF8&psc=1"},
-					{"2022/3/1", "249-0204032-0068674", "カラーボックス", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1881", "1", "1881", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B002NA54SS/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"},
-					{"2022/3/1", "249-0204032-0068674", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/3/2", "7321", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""},
-					{"2022/3/1", "249-0204032-0068674", "（Amazonポイント）", "※（注文全体）請求額に反映", "", "", "", "-2059", "", "", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""}
-				};
-			CompileOrderData inputOrder = new CompileOrderData(inputMultipleOrder);
-			Field orderLine = CompileOrderData.class.getDeclaredField("orderData");
-			orderLine.setAccessible(true);
-			List<String[]> order = (List<String[]>)orderLine.get(inputOrder);
-			String[] expect = {"2022/3/2", "昇降チェア\r\nカラーボックス", "7321"};
-			//assertThat(order.equals(expect)).isEqualTo(true);
-			assertThat(Arrays.toString(order.get(0))).isEqualTo(Arrays.toString(expect));
-			
-			String[] unexpect = {"2022/3/2", "昇降チェアカラーボックス", "999"};
-			assertThat(order.get(0).equals(unexpect)).isEqualTo(false);
-		}catch(NoSuchFieldException ex) {
-			fail();
-		} catch (IllegalAccessException e) {
-			fail();
-		}
+		List<String[]> inputMultipleOrder = (List<String[]>) new ArrayList<String[]>(){{
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "（注文全体）", "", "", "", "", "9380", "", "", "中根 涼平", "7321", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "昇降チェア", "販売： アマゾンジャパン合同会社  コンディション： 新品", "7499", "1", "7499", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B08CV44VBW/ref=ppx_od_dt_b_asin_title_s01?ie=UTF8&psc=1"});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "カラーボックス", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1881", "1", "1881", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B002NA54SS/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/3/2", "7321", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "（Amazonポイント）", "※（注文全体）請求額に反映", "", "", "", "-2059", "", "", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""});
+			}};
+		List<String[]> order = CompileOrderData.getConpiledOrder(inputMultipleOrder);
+		String[] expect = {"2022/3/2", "昇降チェア\r\nカラーボックス", "7321"};
+		//assertThat(order.equals(expect)).isEqualTo(true);
+		assertThat(Arrays.toString(order.get(0))).isEqualTo(Arrays.toString(expect));
+		
+		String[] unexpect = {"2022/3/2", "昇降チェアカラーボックス", "999"};
+		assertThat(order.get(0).equals(unexpect)).isEqualTo(false);
 	}
 	
 	@Test
 	void testGroupingAmazonOrder() {
 		try {
-			String[][] inputMultipleOrder = {
-					{"2022/3/1", "249-0204032-0068674", "（注文全体）", "", "", "", "", "9380", "", "", "中根 涼平", "7321", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""},
-					{"2022/3/1", "249-0204032-0068674", "昇降チェア", "販売： アマゾンジャパン合同会社  コンディション： 新品", "7499", "1", "7499", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B08CV44VBW/ref=ppx_od_dt_b_asin_title_s01?ie=UTF8&psc=1"},
-					{"2022/3/1", "249-0204032-0068674", "カラーボックス", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1881", "1", "1881", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B002NA54SS/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"},
-					{"2022/3/1", "249-0204032-0068674", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/3/2", "7321", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""},
-					{"2022/3/1", "249-0204032-0068674", "（Amazonポイント）", "※（注文全体）請求額に反映", "", "", "", "-2059", "", "", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""},
-					{"2022/2/18", "249-4581037-7642224", "（注文全体）", "", "", "", "", "1782", "", "", "中根 涼平", "1782", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""},
-					{"2022/2/18", "249-4581037-7642224", "Webカメラ", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1782", "1", "1782", "", "中根涼平", "2022年2月18日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/product/B07QMKND9M/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"},
-					{"2022/2/18", "249-4581037-7642224", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/2/19", "999", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""}
-				};
-			CompileOrderData inputOrder = new CompileOrderData(inputMultipleOrder);
+			List<String[]> inputMultipleOrder =  (List<String[]>) new ArrayList<String[]>(){{
+					add(new String[] {"2022/3/1", "249-0204032-0068674", "（注文全体）", "", "", "", "", "9380", "", "", "中根 涼平", "7321", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""});
+					add(new String[] {"2022/3/1", "249-0204032-0068674", "昇降チェア", "販売： アマゾンジャパン合同会社  コンディション： 新品", "7499", "1", "7499", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B08CV44VBW/ref=ppx_od_dt_b_asin_title_s01?ie=UTF8&psc=1"});
+					add(new String[] {"2022/3/1", "249-0204032-0068674", "カラーボックス", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1881", "1", "1881", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B002NA54SS/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"});
+					add(new String[] {"2022/3/1", "249-0204032-0068674", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/3/2", "7321", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""});
+					add(new String[] {"2022/3/1", "249-0204032-0068674", "（Amazonポイント）", "※（注文全体）請求額に反映", "", "", "", "-2059", "", "", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""});
+					add(new String[] {"2022/2/18", "249-4581037-7642224", "（注文全体）", "", "", "", "", "1782", "", "", "中根 涼平", "1782", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""});
+					add(new String[] {"2022/2/18", "249-4581037-7642224", "Webカメラ", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1782", "1", "1782", "", "中根涼平", "2022年2月18日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/product/B07QMKND9M/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"});
+					add(new String[] {"2022/2/18", "249-4581037-7642224", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/2/19", "999", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""});
+				}};
+			CompileOrderData inputOrder = new CompileOrderData();
 //			ConpileOrderData inputOrder = ConpileOrderData.class.getDeclaredConstructor().newInstance(inputMultipleOrder);
-			Method testMethod = CompileOrderData.class.getDeclaredMethod("groupingOrder", String[][].class);
+			Method testMethod = CompileOrderData.class.getDeclaredMethod("groupingOrder", List.class);
 			testMethod.setAccessible(true);
 			Object[] param = {inputMultipleOrder};
 			Map<String, List<String[]>> groupedOrder = (Map<String, List<String[]>>) testMethod.invoke(inputOrder, param);
@@ -129,31 +110,42 @@ public class CompileOrderDataTests {
 	
 	@Test
 	void testCompileAmazonOrder() {
-		try {
-			String[][] inputMultipleOrder = {
-					{"2022/2/18", "249-4581037-7642224", "（注文全体）", "", "", "", "", "1782", "", "", "中根 涼平", "1782", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""},
-					{"2022/2/18", "249-4581037-7642224", "Webカメラ", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1782", "1", "1782", "", "中根涼平", "2022年2月18日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/product/B07QMKND9M/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"},
-					{"2022/2/18", "249-4581037-7642224", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/2/19", "999", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""},
-					{"2022/3/1", "249-0204032-0068674", "（注文全体）", "", "", "", "", "9380", "", "", "中根 涼平", "7321", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""},
-					{"2022/3/1", "249-0204032-0068674", "昇降チェア", "販売： アマゾンジャパン合同会社  コンディション： 新品", "7499", "1", "7499", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B08CV44VBW/ref=ppx_od_dt_b_asin_title_s01?ie=UTF8&psc=1"},
-					{"2022/3/1", "249-0204032-0068674", "カラーボックス", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1881", "1", "1881", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B002NA54SS/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"},
-					{"2022/3/1", "249-0204032-0068674", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/3/2", "7321", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""},
-					{"2022/3/1", "249-0204032-0068674", "（Amazonポイント）", "※（注文全体）請求額に反映", "", "", "", "-2059", "", "", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""}
-				};
-			CompileOrderData inputOrder = new CompileOrderData(inputMultipleOrder);
-			Field orderLine = CompileOrderData.class.getDeclaredField("orderData");
-			orderLine.setAccessible(true);
-			List<String[]> order = (List<String[]>)orderLine.get(inputOrder);
-			String[][] expect = {
-					{"2022/2/19", "Webカメラ", "999"},
-					{"2022/3/2", "昇降チェア\r\nカラーボックス", "7321"}
-				};
-			assertThat(Arrays.toString(order.get(0))).isEqualTo(Arrays.toString(expect[0]));
-			assertThat(Arrays.toString(order.get(1))).isEqualTo(Arrays.toString(expect[1]));
-		}catch(NoSuchFieldException ex) {
-			fail();
-		} catch (IllegalAccessException e) {
-			fail();
-		}
+		List<String[]> inputMultipleOrder =  (List<String[]>) new ArrayList<String[]>(){{
+				add(new String[] {"2022/2/18", "249-4581037-7642224", "（注文全体）", "", "", "", "", "1782", "", "", "中根 涼平", "1782", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""});
+				add(new String[] {"2022/2/18", "249-4581037-7642224", "Webカメラ", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1782", "1", "1782", "", "中根涼平", "2022年2月18日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/product/B07QMKND9M/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"});
+				add(new String[] {"2022/2/18", "249-4581037-7642224", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/2/19", "999", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "（注文全体）", "", "", "", "", "9380", "", "", "中根 涼平", "7321", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "昇降チェア", "販売： アマゾンジャパン合同会社  コンディション： 新品", "7499", "1", "7499", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B08CV44VBW/ref=ppx_od_dt_b_asin_title_s01?ie=UTF8&psc=1"});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "カラーボックス", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1881", "1", "1881", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B002NA54SS/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/3/2", "7321", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "（Amazonポイント）", "※（注文全体）請求額に反映", "", "", "", "-2059", "", "", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""});
+			}};
+		List<String[]> order = CompileOrderData.getConpiledOrder(inputMultipleOrder);
+		String[][] expect = {
+				{"2022/2/19", "Webカメラ", "999"},
+				{"2022/3/2", "昇降チェア\r\nカラーボックス", "7321"}
+			};
+		assertThat(Arrays.toString(order.get(0))).isEqualTo(Arrays.toString(expect[0]));
+		assertThat(Arrays.toString(order.get(1))).isEqualTo(Arrays.toString(expect[1]));
+	}
+	
+	@Test
+	void testAmountZeroOrder() {
+		List<String[]> inputMultipleOrder =  (List<String[]>) new ArrayList<String[]>(){{
+				add(new String[] {"2022/2/18", "249-4581037-7642224", "（注文全体）", "", "", "", "", "1782", "", "", "中根 涼平", "1782", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""});
+				add(new String[] {"2022/2/18", "249-4581037-7642224", "Webカメラ", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1782", "1", "1782", "", "中根涼平", "2022年2月18日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/product/B07QMKND9M/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"});
+				add(new String[] {"2022/2/18", "249-4581037-7642224", "（クレジットカードへの請求）", "", "", "", "", "", "", "", "中根 涼平", "", "2022/2/19", "999", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-4581037-7642224", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o03?ie=UTF8&orderID=249-4581037-7642224", ""});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "（注文全体）", "", "", "", "", "9380", "", "", "中根 涼平", "7321", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "昇降チェア", "販売： アマゾンジャパン合同会社  コンディション： 新品", "7499", "1", "7499", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B08CV44VBW/ref=ppx_od_dt_b_asin_title_s01?ie=UTF8&psc=1"});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "カラーボックス", "販売： アマゾンジャパン合同会社  コンディション： 新品", "1881", "1", "1881", "", "中根 涼平", "2022年3月2日に発送済み", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/product/B002NA54SS/ref=ppx_od_dt_b_asin_title_s00?ie=UTF8&psc=1"});
+				add(new String[] {"2022/3/1", "249-0204032-0068674", "（Amazonポイント）", "※（注文全体）請求額に反映", "", "", "", "-2059", "", "", "中根 涼平", "", "", "", "MasterCard（下4けたが3302）", "https://www.amazon.co.jp/gp/css/summary/edit.html?ie=UTF8&orderID=249-0204032-0068674", "https://www.amazon.co.jp/gp/css/summary/print.html/ref=ppx_yo_dt_b_invoice_o07?ie=UTF8&orderID=249-0204032-0068674", ""});
+			}};
+		List<String[]> order = CompileOrderData.getConpiledOrder(inputMultipleOrder);
+		String[][] expect = {
+				{"2022/2/19", "Webカメラ", "999"},
+				{"2022/3/1", "昇降チェア\r\nカラーボックス", "0"}
+			};
+		assertThat(Arrays.toString(order.get(0))).isEqualTo(Arrays.toString(expect[0]));
+		assertThat(Arrays.toString(order.get(1))).isEqualTo(Arrays.toString(expect[1]));
 	}
 }

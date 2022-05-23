@@ -1,9 +1,6 @@
-package com.example.demo.presentation;
+package com.example.demo.controller;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.example.demo.model.AmazonCsvReader;
 import com.example.demo.model.BillingStatementList;
+import com.example.demo.model.ComparisonResult;
+import com.example.demo.model.CompileOrderData;
 import com.example.demo.model.OrderStatementList;
 import com.example.demo.model.SmbcCsvReader;
 
@@ -36,22 +35,16 @@ public class TopPageController {
 		
 		//Amazon注文データを取得
 		final AmazonCsvReader amazonCsvReader = new AmazonCsvReader();
-		final List<String[]> amazonRawData = amazonCsvReader.read(smbcCSV);
-		final OrderStatementList amazonData = new OrderStatementList(amazonRawData);
-		final List<Map<String, String>> list = new ArrayList<>();
-		Map<String, String> map = new HashMap<String,String>();
-		map.put("billingDate", "smbctest");
-		map.put("biller", "itemName");
-		map.put("amount", "1111");
-		list.add(map);
-		Map<String, String> map2 = new HashMap<String,String>();
-		map2.put("billingDate", "smbctest2");
-		map2.put("biller", "itemName2");
-		map2.put("amount", "1112");
-		list.add(map2);
-		model.addAttribute("smbcNotMatched", list);
-		model.addAttribute("amazonNotMatched", new ArrayList<>());
-		model.addAttribute("matched", new ArrayList<>());
+		final List<String[]> amazonRawData = amazonCsvReader.read(amazonCSV);
+		final List<String[]> amazonCompiledData = CompileOrderData.getConpiledOrder(amazonRawData);
+		final OrderStatementList amazonData = new OrderStatementList(amazonCompiledData);
+
+		// データの比較
+		final ComparisonResult result = new ComparisonResult(smbcData, amazonData);
+		result.generateComparisonResult();
+		model.addAttribute("smbcNotMatched", result.getSmbcNotMatched());
+		model.addAttribute("amazonNotMatched", result.getAmazonNotMatched());
+		model.addAttribute("matched", result.getMatched());
 		return "topPage";
 	}
 }

@@ -5,7 +5,6 @@
 <title>Top</title>
 <meta name="description" content="Hello">
 <link th:href="@{/CSS/topPage.css}" rel="stylesheet">
-<script th:src="@{/js/topPage.js}"></script>
 </head>
 <body>
 	<div class="content">
@@ -25,7 +24,7 @@
 	        <td>請求元</td>
 	        <td>金額</td>
 	    </tr>
-	    <tr th:each="line:${smbcNotMatch}">
+	    <tr th:each="line:${smbcNotMatched}">
 	        <td th:text=${line.billingDate}></td>
 	        <td th:text=${line.biller}></td>
 	        <td th:text=${line.amount}></td>
@@ -38,9 +37,9 @@
 	        <td>商品</td>
 	        <td>金額</td>
 	    </tr>
-	    <tr th:each="line:${amazonNotMatch}">
-	        <td th:text=${line.orderDate}></td>
-	        <td th:text=${line.item}></td>
+	    <tr th:each="line:${amazonNotMatched}">
+	        <td th:text=${line.billedDate}></td>
+	        <td th:text=${line.itemName}></td>
 	        <td th:text=${line.amount}></td>
 	    </tr>
 	    </table>
@@ -51,9 +50,9 @@
 	        <td>商品</td>
 	        <td>金額</td>
 	    </tr>
-	    <tr th:each="line:${match}">
-	        <td th:text=${line.orderDate}></td>
-	        <td th:text=${line.item}></td>
+	    <tr th:each="line:${matched}">
+	        <td th:text=${line.billedDate}></td>
+	        <td th:text=${line.itemName}></td>
 	        <td th:text=${line.amount}></td>
 	    </tr>
 	    </table>

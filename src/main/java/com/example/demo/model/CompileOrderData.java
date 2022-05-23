@@ -1,7 +1,6 @@
 package com.example.demo.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -9,13 +8,10 @@ import java.util.stream.Collectors;
 
 public class CompileOrderData {
 
-	private final List<String[]> orderData;
-	public CompileOrderData(final String[][] lines){
-		final List<String[]> orderData = conpileOrder(lines);
-		this.orderData = orderData;
+	public CompileOrderData(){
 	}
 	
-	private List<String[]> conpileOrder(final String[][] lines) {
+	public static List<String[]> getConpiledOrder(final List<String[]> lines) {
 		final Map<String, List<String[]>> groupedLines = groupingOrder(lines);
 		final List<String[]> list = new ArrayList<String[]>();
 		
@@ -37,17 +33,24 @@ public class CompileOrderData {
 				}
 			}
 			// 商品名を改行コード区切りで出力
-			String items = String.join("\r\n", itemName);
-			list.add(new String[] {billedDate, items, amount});
+			final String items = String.join("\r\n", itemName);
+			// ポイント支払等、請求額が０の場合
+			if(billedDate == null || amount == null) {
+				// 事前に0番目に日付が入る行を対象にしているのでどの行でも日付は取れるはず
+				// FIXME: 保守性がとても悪いコード（行位置、列位置がべた書き）
+				list.add(new String[] {order.get(0)[0], items, "0"});
+			}else {
+				list.add(new String[] {billedDate, items, amount});
+			}
+			
 		}
 		
 		
 		return list;
 	}
 	
-	private Map<String, List<String[]>> groupingOrder(final String[][] lines){
-		final List<String[]> linesAsList = new ArrayList<String[]>(Arrays.asList(lines));
-		final Map<String, List<String[]>> result = linesAsList.stream().collect(Collectors.groupingBy(s -> s[1]));
+	private static Map<String, List<String[]>> groupingOrder(final List<String[]> lines){
+		final Map<String, List<String[]>> result = lines.stream().collect(Collectors.groupingBy(s -> s[1]));
 		return result;
 	}
 }
