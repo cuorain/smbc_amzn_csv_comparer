@@ -22,7 +22,7 @@ public class OrderStatement {
 		this.itemName = line[1];
 	}
 	
-	public boolean matchBilling(final BillingStatement billing) {
+	protected boolean matchBilling(final BillingStatement billing) {
 		return this.getBilledDate().equals(billing.getBillingDate())		//請求日比較
 			&& this.getAmount().toString().equals(billing.getAmount());	//金額比較
 	}

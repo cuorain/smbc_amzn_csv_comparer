@@ -12,13 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class AmazonCsvReader{
 	//判定用の日付列
 	private static final int dateIndex = 0;
-	private final CsvReaderUtil csvReader = new CsvReaderUtil();
+	private static final CsvReaderUtil csvReader = new CsvReaderUtil();
 	
-	public AmazonCsvReader() {
+	private AmazonCsvReader() {
 		
 	}
 	
-	public List<String[]> read(final MultipartFile file){
+	public static List<String[]> read(final MultipartFile file){
 		final List<String[]> readData = new ArrayList<String[]>();
 		try(BufferedReader br = new BufferedReader(
 				new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))){
@@ -36,7 +36,7 @@ public class AmazonCsvReader{
 		return readData;
 	}
 	
-	private boolean isReadTargetData(final String data) {
+	private static boolean isReadTargetData(final String data) {
 		return csvReader.isReadTargetData(data);
 	}
 }

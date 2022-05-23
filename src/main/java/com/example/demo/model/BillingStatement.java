@@ -22,7 +22,7 @@ public class BillingStatement {
 		this.amount = new BigDecimal(line[2]);
 	}
 	
-	public boolean matchOrder(final OrderStatement order) {
+	protected boolean matchOrder(final OrderStatement order) {
 		return this.getBillingDate().equals(order.getBilledDate())		//請求日比較
 			&& this.getAmount().toString().equals(order.getAmount());	//金額比較
 	}
@@ -35,11 +35,11 @@ public class BillingStatement {
 		return this.amount.toString();
 	}
 	
-	public static List<Map<String, String>> convertToMapList(final List<BillingStatement> list){
+	protected static List<Map<String, String>> convertToMapList(final List<BillingStatement> list){
 		return list.stream().map(b -> b.asBillingMap()).collect(Collectors.toList());
 	}
 
-	public Map<String, String> asBillingMap(){
+	private Map<String, String> asBillingMap(){
 		Map<String, String> map = new HashMap<String,String>();
 		map.put("billingDate", getBillingDate());
 		map.put("biller", this.biller);

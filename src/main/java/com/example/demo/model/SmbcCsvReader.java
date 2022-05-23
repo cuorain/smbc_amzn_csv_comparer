@@ -11,15 +11,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class SmbcCsvReader{
 	//判定用の日付列位置
-	private final int dateIndex = 0;
-	private final CsvReaderUtil csvReader = new CsvReaderUtil();
+	private static final int dateIndex = 0;
+	private static final CsvReaderUtil csvReader = new CsvReaderUtil();
 	
 	//ユーティリティクラスなのでprivate(Csvを文字列Listで返すだけ）
-	public SmbcCsvReader() {
+	private SmbcCsvReader() {
 		
 	}
 	
-	public List<String[]> read(final MultipartFile file){
+	public static List<String[]> read(final MultipartFile file){
 		final List<String[]> readData = new ArrayList<String[]>();
 		try(BufferedReader br = new BufferedReader(
 				new InputStreamReader(file.getInputStream(), Charset.forName("SJIS")))){
@@ -36,7 +36,7 @@ public class SmbcCsvReader{
 		return readData;
 	}
 	
-	private boolean isReadTargetData(final String data) {
+	private static boolean isReadTargetData(final String data) {
 		return csvReader.isReadTargetData(data);
 	}
 }
