@@ -16,4 +16,8 @@ public class BillingStatementList {
 		}
 		this.billingStatementList = Collections.unmodifiableList(list);
 	}
+	
+	public List<BillingStatement> asList(){
+		return this.billingStatementList;
+	}
 }
