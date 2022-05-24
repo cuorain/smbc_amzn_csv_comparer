@@ -18,7 +18,7 @@ public class AmazonCsvReader{
 	// コンポジションを使う
 	private static final CsvReaderUtil csvReader = new CsvReaderUtil();
 	
-	public AmazonCsvReader() {
+	private AmazonCsvReader() {
 		
 	}
 	
