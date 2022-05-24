@@ -50,4 +50,5 @@ public class OrderStatement {
 		map.put("amount", getAmount());
 		return map;
 	}
+	
 }
