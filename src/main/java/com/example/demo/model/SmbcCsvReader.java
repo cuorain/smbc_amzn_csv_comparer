@@ -14,8 +14,7 @@ public class SmbcCsvReader{
 	private static final int dateIndex = 0;
 	private static final CsvReaderUtil csvReader = new CsvReaderUtil();
 	
-	//ユーティリティクラスなのでprivate(Csvを文字列Listで返すだけ）
-	private SmbcCsvReader() {
+	public SmbcCsvReader() {
 		
 	}
 	
