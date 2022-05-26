@@ -4,13 +4,13 @@
 ## 想定利用者
 三井住友カードでAmazonの注文をしている人
 ## 使い方
-①三井住友カードの請求明細をCSVで取得（V-pass）
-②Amazonの注文履歴をCSVで取得
-　拡張機能を利用する（Chromeから出力されたものでのみ動作確認済）
-　https://ishitax-blog.jp/order-history-amazon_csv-file/
-③リポジトリからソースコード取得＆Eclipse等で実行
-④localhostにアクセス
-⑤取得したCSVをそれぞれ選択してSTART
+①三井住友カードの請求明細をCSVで取得（V-pass）  
+②Amazonの注文履歴をCSVで取得  
+　拡張機能を利用する（Chromeから出力されたものでのみ動作確認済）  
+　https://ishitax-blog.jp/order-history-amazon_csv-file/  
+③リポジトリからソースコード取得＆Eclipse等で実行  
+④localhostにアクセス  
+⑤取得したCSVをそれぞれ選択してSTART  
 ## 注意点
 * 2022/05/24時点で使い方間違えなければ動作する。
 * 拡張機能やV-passの仕様変更によって使えなくなる可能性大。
