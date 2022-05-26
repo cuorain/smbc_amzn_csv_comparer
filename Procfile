@@ -1,1 +1,1 @@
-web: java -Dserver.port=$PORT -jar target/smbcAmznCompare-0.0.1-SNAPSHOT.jar
+web: java -cp target/classes:target/dependency/* com.example.demo.SmbcAmznCompareApplication
