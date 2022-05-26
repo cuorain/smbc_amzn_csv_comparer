@@ -3,9 +3,7 @@
 三井住友カードの請求明細、Amazonの注文履歴のCSVファイルを比較し、不正利用がないか等をチェックする。
 ## 想定利用者
 三井住友カードでAmazonの注文をしている人
-## 使い方
-herokuへデプロイ  
-URL:https://cr-csv-compare.herokuapp.com/  
+## 使い方   
 ①三井住友カードの請求明細をCSVで取得（V-pass）  
 ②Amazonの注文履歴をCSVで取得  
 　拡張機能を利用する（Chromeから出力されたものでのみ動作確認済）  
@@ -56,7 +54,7 @@ URL:https://cr-csv-compare.herokuapp.com/
 ④  
 　Javaと言えばSpring Frameworkらしいけど使ったことなかったので、自分で使ってみた。  
 　Spring Boot+Thymeleafでアプリ開発を実践。中身の仕組み的なところの理解はまだできていない。  
-　herokuでデプロイをもしてみた。  
+　herokuでデプロイをもしてみた。(URL:https://cr-csv-compare.herokuapp.com/ )  
 　ちょっと沼ったけど、やり方わかっていれば5分程度でお手軽にアプリを公開できるのは素晴らしい！  
 
 ⑤  
