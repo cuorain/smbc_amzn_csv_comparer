@@ -9,17 +9,34 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
+/**
+ * 三井住友カードの請求明細CSVファイルを読み取るクラス
+ *  
+ * @author COSMOROOT
+ *
+ */
 public class SmbcCsvReader{
-	//判定用の日付列位置
+	/**
+	 * 判定用の日付列
+	 */
 	private static final int dateIndex = 0;
+	/**
+	 * CsvReaderUtil(共通処理用)
+	 */
 	private static final CsvReaderUtil csvReader = new CsvReaderUtil();
 	
 	public SmbcCsvReader() {
 		
 	}
 	
+	/**
+	 * CSVを読み取り、請求データを文字列配列にしたリストを返す
+	 * @param file 読み取ったCSVファイル
+	 * @return 請求データを格納したリスト
+	 */
 	public static List<String[]> read(final MultipartFile file){
 		final List<String[]> readData = new ArrayList<String[]>();
+		// データの読み取り
 		try(BufferedReader br = new BufferedReader(
 				new InputStreamReader(file.getInputStream(), Charset.forName("SJIS")))){
 			String line;
@@ -35,6 +52,12 @@ public class SmbcCsvReader{
 		return readData;
 	}
 	
+	/**
+	 * 読み取り対象のデータかを判定する。
+	 * 本クラスではdataが日付かどうかで判定
+	 * @param data 判定される値（本クラスでは、配列の1番目の要素）
+	 * @return dataがyyyy/MM/dd形式ならTrue、それ以外はFalse
+	 */
 	private static boolean isReadTargetData(final String data) {
 		return csvReader.isReadTargetData(data);
 	}
