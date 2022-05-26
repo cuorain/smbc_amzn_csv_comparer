@@ -4,6 +4,8 @@
 ## 想定利用者
 三井住友カードでAmazonの注文をしている人
 ## 使い方
+herokuへデプロイ  
+URL:https://cr-csv-compare.herokuapp.com/  
 ①三井住友カードの請求明細をCSVで取得（V-pass）  
 ②Amazonの注文履歴をCSVで取得  
 　拡張機能を利用する（Chromeから出力されたものでのみ動作確認済）  
