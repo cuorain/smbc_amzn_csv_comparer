@@ -15,17 +15,13 @@ import org.springframework.web.multipart.MultipartFile;
  * @author COSMOROOT
  *
  */
-public class SmbcCsvReader{
+public class CsvReaderSmbc{
 	/**
 	 * 判定用の日付列
 	 */
 	private static final int dateIndex = 0;
-	/**
-	 * CsvReaderUtil(共通処理用)
-	 */
-	private static final CsvReaderUtil csvReader = new CsvReaderUtil();
 	
-	public SmbcCsvReader() {
+	public CsvReaderSmbc() {
 		
 	}
 	
@@ -59,6 +55,6 @@ public class SmbcCsvReader{
 	 * @return dataがyyyy/MM/dd形式ならTrue、それ以外はFalse
 	 */
 	private static boolean isReadTargetData(final String data) {
-		return csvReader.isReadTargetData(data);
+		return CsvReaderUtil.isReadTargetData(data);
 	}
 }
