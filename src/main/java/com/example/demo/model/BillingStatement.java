@@ -47,7 +47,7 @@ public class BillingStatement {
 	 * @param order 注文
 	 * @return 注文に対応するならTrue、それ以外はFalse
 	 */
-	protected boolean matchOrder(final OrderStatement order) {
+	public boolean matchOrder(final OrderStatement order) {
 		return this.getBillingDate().equals(order.getBilledDate())		//請求日比較
 			&& this.getAmount().toString().equals(order.getAmount());	//金額比較
 	}
@@ -73,7 +73,7 @@ public class BillingStatement {
 	 * @param list 請求オブジェクトのリスト
 	 * @return マップ化された請求のリスト
 	 */
-	protected static List<Map<String, String>> convertToMapList(final List<BillingStatement> list){
+	public static List<Map<String, String>> convertToMapList(final List<BillingStatement> list){
 		return list.stream().map(b -> b.asBillingMap()).collect(Collectors.toList());
 	}
 

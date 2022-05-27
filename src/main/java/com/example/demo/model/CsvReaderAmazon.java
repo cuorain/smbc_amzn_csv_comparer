@@ -19,18 +19,13 @@ import org.springframework.web.multipart.MultipartFile;
  * @author COSMOROOT
  *
  */
-public class AmazonCsvReader{
+public class CsvReaderAmazon{
 	/**
 	 * 判定用の日付列
 	 */
 	private static final int dateIndex = 0;
-	/**
-	 * CsvReaderUtil(共通処理用)
-	 */
-	// コンポジションを使う
-	private static final CsvReaderUtil csvReader = new CsvReaderUtil();
 	
-	private AmazonCsvReader() {
+	private CsvReaderAmazon() {
 		
 	}
 	
@@ -69,7 +64,7 @@ public class AmazonCsvReader{
 	 * @return dataがyyyy/MM/dd形式ならTrue、それ以外はFalse
 	 */
 	private static boolean isReadTargetData(final String data) {
-		return csvReader.isReadTargetData(data);
+		return CsvReaderUtil.isReadTargetData(data);
 	}
 
 	

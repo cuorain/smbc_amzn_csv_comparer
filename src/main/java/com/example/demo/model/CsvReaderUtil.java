@@ -15,7 +15,7 @@ public class CsvReaderUtil {
 	 * @param data 判定される値
 	 * @return dataがyyyy/MM/dd形式ならTrue、それ以外はFalse
 	 */
-	protected boolean isReadTargetData(final String data) {
+	protected static boolean isReadTargetData(final String data) {
 		try{
 		    SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
 		    // 厳密にチェック
